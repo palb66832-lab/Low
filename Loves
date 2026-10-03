@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turn Tracker - Bittu & Darlo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 30px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+    h2 {
+      margin-top: 0;
+      color: #333;
+      font-size: 20px;
+    }
+    .date-badge {
+      display: inline-block;
+      background: #f1f3f5;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 25px;
+    }
+    .turn-box {
+      border-radius: 18px;
+      padding: 25px;
+      margin-bottom: 25px;
+      transition: all 0.3s ease;
+    }
+    .turn-title {
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .turn-name {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 0;
+    }
+    /* Bittu's theme */
+    .bittu-theme {
+      background: #e7f5ff;
+      color: #1971c2;
+    }
+    /* Darlo's theme */
+    .darlo-theme {
+      background: #fff0f6;
+      color: #d6336c;
+    }
+    .next-box {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Bittu & Darlo's Routine</h2>
+    <div class="date-badge" id="currentDate">তারিখ লোড হচ্ছে...</div>
+
+    <div class="turn-box" id="turnCard">
+      <div class="turn-title">আজকের পালা</div>
+      <div class="turn-name" id="turnPerson">হিসাব হচ্ছে...</div>
+    </div>
+
+    <div class="next-box">
+      আগামীকাল মেসেজ করবে: <strong id="nextPerson">...</strong>
+    </div>
+  </div>
+
+  <script>
+    // শুরুর তারিখ সেট করো (YYYY-MM-DD ফরম্যাটে)
+    // এই দিনটিতে কার পালা ছিল তা ঠিক করো:
+    const START_DATE = new Date("2026-10-01"); 
+    const FIRST_DAY_PERSON = "Bittu"; // 2026-10-01 তারিখে Bittu শুরু করেছিল
+
+    function getDifferenceInDays(date1, date2) {
+      const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+      const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+      return Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24));
+    }
+
+    const today = new Date();
+    const diffDays = getDifferenceInDays(START_DATE, today);
+
+    // জোড় দিনে প্রথমজন, বিজোড় দিনে দ্বিতীয়জন
+    const isFirstPerson = Math.abs(diffDays) % 2 === 0;
+
+    let todayPerson = isFirstPerson ? "Bittu" : "Darlo (Rakhi)";
+    let tomorrowPerson = isFirstPerson ? "Darlo (Rakhi)" : "Bittu";
+
+    // UI আপডেট
+    document.getElementById("turnPerson").innerText = todayPerson;
+    document.getElementById("nextPerson").innerText = tomorrowPerson;
+
+    const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+    document.getElementById("currentDate").innerText = today.toLocaleDateString('bn-IN', options);
+
+    const card = document.getElementById("turnCard");
+    if (todayPerson === "Bittu") {
+      card.className = "turn-box bittu-theme";
+    } else {
+      card.className = "turn-box darlo-theme";
+    }
+  </script>
+</body>
+</html>
